@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crossroads.WebAPI", "Presen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crossroads.Application", "Core\Crossroads.Application\Crossroads.Application.csproj", "{955C46D4-702F-45CB-9FE4-CDDB6F69CF64}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crossroads.Domain", "Core\Crossroads.Domain\Crossroads.Domain.csproj", "{F2DCBF99-F54D-4D69-93DA-02C383F4A070}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crossroads.Persistence", "Infrastructure\Crossroads.Persistence\Crossroads.Persistence.csproj", "{678E7DEF-BAD3-4358-90B6-3FDC626F80A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{955C46D4-702F-45CB-9FE4-CDDB6F69CF64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{955C46D4-702F-45CB-9FE4-CDDB6F69CF64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{955C46D4-702F-45CB-9FE4-CDDB6F69CF64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2DCBF99-F54D-4D69-93DA-02C383F4A070}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2DCBF99-F54D-4D69-93DA-02C383F4A070}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2DCBF99-F54D-4D69-93DA-02C383F4A070}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2DCBF99-F54D-4D69-93DA-02C383F4A070}.Release|Any CPU.Build.0 = Release|Any CPU
+		{678E7DEF-BAD3-4358-90B6-3FDC626F80A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{678E7DEF-BAD3-4358-90B6-3FDC626F80A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{678E7DEF-BAD3-4358-90B6-3FDC626F80A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{678E7DEF-BAD3-4358-90B6-3FDC626F80A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -34,6 +46,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{FE9CC177-2355-46A1-B31E-CCB3F0EFB6CD} = {5AF52DF3-FD76-4BC8-A356-1BA18CDF10CE}
 		{955C46D4-702F-45CB-9FE4-CDDB6F69CF64} = {73C2EDBA-2CF0-434E-8FAF-F5D025772068}
+		{F2DCBF99-F54D-4D69-93DA-02C383F4A070} = {73C2EDBA-2CF0-434E-8FAF-F5D025772068}
+		{678E7DEF-BAD3-4358-90B6-3FDC626F80A8} = {54A6E1F3-D0D4-4799-AB6D-A4639B144FEF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {20CC5538-B504-422D-B2F5-C51DF6039856}

@@ -1,4 +1,4 @@
-﻿namespace Crossroads.Application
+﻿namespace Crossroads.Persistence
 {
     public class Class1
     {
