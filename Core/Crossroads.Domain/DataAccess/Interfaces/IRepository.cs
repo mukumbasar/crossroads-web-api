@@ -9,7 +9,7 @@ using Crossroads.Domain.Entities.Interfaces;
 
 namespace Crossroads.Domain.DataAccess.Interfaces
 {
-    public interface IRepository<TEntity> where TEntity : class, IEntity
+    public interface IRepository
     {
         int SaveChanges();
     }

@@ -20,4 +20,11 @@
     <ProjectReference Include="..\..\Core\Crossroads.Application\Crossroads.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Context\" />
+    <Folder Include="Repositories\Specific\" />
+    <Folder Include="UnitOfWork\" />
+    <Folder Include="SeedData\" />
+  </ItemGroup>
+
 </Project>
