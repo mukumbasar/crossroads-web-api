@@ -40,10 +40,13 @@ namespace Crossroads.Persistence.Repositories.Base
             await _table.AddRangeAsync(entities);
         }
 
-        public Task<bool> AnyAsync(Expression<Func<TEntity, bool>>? expression = null)
+        public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>>? expression = null)
         {
-            return expression is null ? GetAllActives().AnyAsync() : GetAllActives().AnyAsync(expression);
+            var query = GetAllActives();
+
+            return expression is null ? await query.AnyAsync() : await query.AnyAsync(expression);
         }
+
 
         public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
