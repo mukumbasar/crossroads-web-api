@@ -24,7 +24,7 @@ namespace Crossroads.Application.Services
             _jwtOption = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
-        public async Task<string> CreateToken(IdentityUser user)
+        public async Task<string> GenerateAccessToken(IdentityUser user)
         {
             DateTime notBefore = DateTime.UtcNow;
             DateTime jwtExpiration = notBefore.AddMinutes(_jwtOption.JWTExpiration);
@@ -47,7 +47,7 @@ namespace Crossroads.Application.Services
             return token;
         }
 
-        public async Task<string> RevokeTokenWithExpiretime()
+        public async Task<string> GenerateExpiredAccessToken()
         {
             var securityKey = SignService.GetSymmetricSecurityKey(_jwtOption.SecurityKey);
 

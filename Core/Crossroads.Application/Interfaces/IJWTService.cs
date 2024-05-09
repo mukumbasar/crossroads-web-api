@@ -9,7 +9,7 @@ namespace Crossroads.Application.Interfaces
 {
     public interface IJWTService
     {
-        Task<string> CreateToken(IdentityUser user);
-        Task<string> RevokeTokenWithExpiretime();
+        Task<string> GenerateAccessToken(IdentityUser user);
+        Task<string> GenerateExpiredAccessToken();
     }
 }
