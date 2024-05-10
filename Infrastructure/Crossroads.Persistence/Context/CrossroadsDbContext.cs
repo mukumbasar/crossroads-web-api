@@ -1,4 +1,5 @@
 ﻿using Crossroads.Domain.Entities.Bases;
+using Crossroads.Domain.Entities.DbSets;
 using Crossroads.Domain.EntityConfigurations.Interfaces;
 using Crossroads.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +22,10 @@ namespace Crossroads.Persistence.Context
             
         }
 
-        //DbSets:
+        #region DbSets
+        public virtual IdentityAppUser IdentityAppUser { get; set; }
+        public virtual AppUser AppUser { get; set; } 
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

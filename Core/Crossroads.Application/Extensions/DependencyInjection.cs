@@ -16,30 +16,35 @@ namespace Crossroads.Application.Extensions
     {
         public static IServiceCollection AddServiceExtensions(this IServiceCollection services)
         {
-            services.AddScoped<IJWTService, JWTService>();
+            services.AddScoped<ITokenService, TokenService>();
 
             return services;
         }
 
         public static IServiceCollection AddIdentityExtensions(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<JWTOption>(configuration.GetSection("TokenOptions"));
-            var jwtOptions = configuration.GetSection("TokenOptions").Get<JWTOption>();
+            // Make JWTOption available throughout the application via dependency injection.
+            services.Configure<TokenOptions>(configuration.GetSection("TokenOptions"));
+            // Retrieve JWTOption to be used.
+            var tokenOptions = configuration.GetSection("TokenOptions").Get<TokenOptions>();
+            // Set up authentication schemes.
             services.AddAuthentication(opt =>
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
-            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
+            })
+                // Configure JWT Bearer authentication.
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
             {
                 opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
                 {
-                    ValidIssuer = jwtOptions.Issuer,
-                    ValidAudience = jwtOptions.Audience[0],
+                    ValidIssuer = tokenOptions.Issuer,
+                    ValidAudience = tokenOptions.Audience[0],
                     ValidateIssuerSigningKey = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
-                    IssuerSigningKey = SignService.GetSymmetricSecurityKey(jwtOptions.SecurityKey),
+                    IssuerSigningKey = SignService.GetSymmetricSecurityKey(tokenOptions.SecurityKey),
                     ClockSkew = TimeSpan.Zero
                 };
             });

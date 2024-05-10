@@ -10,34 +10,36 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
+using Crossroads.Domain.Entities.DbSets;
 
 namespace Crossroads.Application.Services
 {
-    public class JWTService : IJWTService
+    public class TokenService : ITokenService
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly JWTOption _jwtOption;
+        private readonly UserManager<IdentityAppUser> _userManager;
+        private readonly Dtos.Configurations.TokenOptions _jwtOptions;
 
-        public JWTService(UserManager<IdentityUser> userManager, IOptions<JWTOption> options)
+        public TokenService(UserManager<IdentityAppUser> userManager, IOptions<Dtos.Configurations.TokenOptions> options)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _jwtOption = options?.Value ?? throw new ArgumentNullException(nameof(options));
+            _jwtOptions = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
-        public async Task<string> GenerateAccessToken(IdentityUser user)
+        public async Task<string> GenerateAccessToken(IdentityAppUser user)
         {
             DateTime notBefore = DateTime.UtcNow;
-            DateTime jwtExpiration = notBefore.AddMinutes(_jwtOption.JWTExpiration);
+            DateTime jwtExpiration = notBefore.AddMinutes(_jwtOptions.JWTAccessTokenExpirationTime);
 
-            var securityKey = SignService.GetSymmetricSecurityKey(_jwtOption.SecurityKey);
+            var securityKey = SignService.GetSymmetricSecurityKey(_jwtOptions.SecurityKey);
 
             SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken
-           (issuer: _jwtOption.Issuer,
+           (issuer: _jwtOptions.Issuer,
             notBefore: notBefore, 
             expires: jwtExpiration,
-            claims: GetClaims(user, _jwtOption.Audience).Result,
+            claims: GetClaims(user, _jwtOptions.Audience).Result,
             signingCredentials: signingCredentials
            );
             
@@ -47,15 +49,31 @@ namespace Crossroads.Application.Services
             return token;
         }
 
+        public async Task<string> GenerateRefreshToken(IdentityAppUser user)
+        {
+            var refreshToken = Guid.NewGuid().ToString();
+            var hashedRefreshToken = HashRefreshToken(refreshToken);
+            var refreshTokenExpirationDate = DateTime.UtcNow.AddMinutes(_jwtOptions.RefreshTokenExpirationTime);
+
+            var identityUser = await _userManager.FindByEmailAsync(user.Email);
+
+            identityUser.RefreshToken = hashedRefreshToken;
+            identityUser.RefreshTokenExpirationDate = refreshTokenExpirationDate;
+
+            await _userManager.UpdateAsync(identityUser);
+
+            return hashedRefreshToken;
+        }
+
         public async Task<string> GenerateExpiredAccessToken()
         {
-            var securityKey = SignService.GetSymmetricSecurityKey(_jwtOption.SecurityKey);
+            var securityKey = SignService.GetSymmetricSecurityKey(_jwtOptions.SecurityKey);
 
             SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken
             (
-                issuer: _jwtOption.Issuer,
+                issuer: _jwtOptions.Issuer,
                 expires: DateTime.UtcNow.AddMinutes(-1),
                 signingCredentials: signingCredentials
             );
@@ -65,7 +83,7 @@ namespace Crossroads.Application.Services
 
             return token;
         }
-        private async Task<IEnumerable<Claim>> GetClaims(IdentityUser user, List<string> audiences)
+        private async Task<IEnumerable<Claim>> GetClaims(IdentityAppUser user, List<string> audiences)
         {    
             var userRoles = await _userManager.GetRolesAsync(user);
 
@@ -81,6 +99,13 @@ namespace Crossroads.Application.Services
             userList.AddRange(userRoles.Select(x => new Claim(ClaimTypes.Role, x)));
 
             return userList;
+        }
+
+        private string HashRefreshToken(string refreshToken)
+        {
+            using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(_jwtOptions.SecurityKey));
+            var hashBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(refreshToken));
+            return Convert.ToBase64String(hashBytes);
         }
     }
 }

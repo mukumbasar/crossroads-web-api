@@ -24,7 +24,7 @@ namespace Crossroads.Persistence.Repositories.Base
 
         protected EFBaseRepository(IdentityDbContext<IdentityUser, IdentityRole, string> context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
             _table = _context.Set<TEntity>();
         }
 

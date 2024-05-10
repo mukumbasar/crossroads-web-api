@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace Crossroads.Application.Dtos.Configurations
 {
-    public class JWTOption
+    public class TokenOptions
     {
         public List<string> Audience { get; set; }
         public string Issuer { get; set; }
-        public int JWTExpiration { get; set; }
+        public int JWTAccessTokenExpirationTime { get; set; }
+        public int RefreshTokenExpirationTime { get; set; }
         public string SecurityKey { get; set; }
     }
 }
