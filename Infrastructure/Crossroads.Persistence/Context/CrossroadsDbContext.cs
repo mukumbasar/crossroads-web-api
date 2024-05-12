@@ -23,7 +23,7 @@ namespace Crossroads.Persistence.Context
         }
 
         #region DbSets
-        public virtual ReferenceToken ReferenceTokens { get; set; }
+        public virtual RefreshToken ReferenceTokens { get; set; }
         public virtual AppUser AppUsers { get; set; } 
         #endregion
 

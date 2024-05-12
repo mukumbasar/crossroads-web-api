@@ -1,5 +1,5 @@
 ﻿using Crossroads.Application.Dtos.Configurations;
-using Crossroads.Application.Interfaces;
+using Crossroads.Application.Interfaces.Services;
 using Crossroads.Application.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
@@ -12,16 +12,9 @@ using System.Threading.Tasks;
 
 namespace Crossroads.Application.Extensions
 {
-    public static class DependencyInjection
+    public static class JwtExtensions
     {
-        public static IServiceCollection AddServiceExtensions(this IServiceCollection services)
-        {
-            services.AddScoped<ITokenService, TokenService>();
-
-            return services;
-        }
-
-        public static IServiceCollection AddIdentityExtensions(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddJwtConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
             // Make JWTOption available throughout the application via dependency injection.
             services.Configure<TokenOptions>(configuration.GetSection("TokenOptions"));
@@ -36,18 +29,18 @@ namespace Crossroads.Application.Extensions
             })
                 // Configure JWT Bearer authentication.
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
-            {
-                opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
                 {
-                    ValidIssuer = tokenOptions.Issuer,
-                    ValidAudience = tokenOptions.Audience[0],
-                    ValidateIssuerSigningKey = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    IssuerSigningKey = SignService.GetSymmetricSecurityKey(tokenOptions.SecurityKey),
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
+                    opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                    {
+                        ValidIssuer = tokenOptions.Issuer,
+                        ValidAudience = tokenOptions.Audience[0],
+                        ValidateIssuerSigningKey = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        IssuerSigningKey = SignService.GetSymmetricSecurityKey(tokenOptions.SecurityKey),
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
 
             return services;
         }

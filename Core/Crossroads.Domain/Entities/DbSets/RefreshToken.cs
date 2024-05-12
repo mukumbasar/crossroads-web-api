@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Crossroads.Domain.Entities.DbSets
 {
-    public class ReferenceToken : AuditableEntity
+    public class RefreshToken : AuditableEntity
     {
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpirationDate { get; set; }

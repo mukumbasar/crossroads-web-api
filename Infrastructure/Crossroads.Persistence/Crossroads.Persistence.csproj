@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\Specific\" />
     <Folder Include="UnitOfWork\" />
     <Folder Include="SeedData\" />
   </ItemGroup>

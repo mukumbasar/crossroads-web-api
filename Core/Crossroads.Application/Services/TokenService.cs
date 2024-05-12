@@ -1,5 +1,4 @@
 ﻿using Crossroads.Application.Dtos.Configurations;
-using Crossroads.Application.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System;
@@ -12,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using Crossroads.Domain.Entities.DbSets;
+using Crossroads.Application.Interfaces.Services;
 
 namespace Crossroads.Application.Services
 {
