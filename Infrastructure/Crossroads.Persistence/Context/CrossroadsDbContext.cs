@@ -23,8 +23,8 @@ namespace Crossroads.Persistence.Context
         }
 
         #region DbSets
-        public virtual IdentityAppUser IdentityAppUser { get; set; }
-        public virtual AppUser AppUser { get; set; } 
+        public virtual ReferenceToken ReferenceTokens { get; set; }
+        public virtual AppUser AppUsers { get; set; } 
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
