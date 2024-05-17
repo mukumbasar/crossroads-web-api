@@ -17,16 +17,16 @@ namespace Crossroads.Application.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly UserManager<IdentityAppUser> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly Dtos.Configurations.TokenOptions _jwtOptions;
 
-        public TokenService(UserManager<IdentityAppUser> userManager, IOptions<Dtos.Configurations.TokenOptions> options)
+        public TokenService(UserManager<IdentityUser> userManager, IOptions<Dtos.Configurations.TokenOptions> options)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _jwtOptions = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
-        public async Task<string> GenerateAccessToken(IdentityAppUser user)
+        public async Task<string> GenerateAccessToken(IdentityUser user)
         {
             DateTime notBefore = DateTime.UtcNow;
             DateTime jwtExpiration = notBefore.AddMinutes(_jwtOptions.JWTAccessTokenExpirationTime);
@@ -49,7 +49,7 @@ namespace Crossroads.Application.Services
             return token;
         }
 
-        public async Task<string> GenerateRefreshToken(IdentityAppUser user)
+        public async Task<string> GenerateRefreshToken(IdentityUser user)
         {
             var refreshToken = Guid.NewGuid().ToString();
             var hashedRefreshToken = HashRefreshToken(refreshToken);
@@ -57,8 +57,8 @@ namespace Crossroads.Application.Services
 
             var identityUser = await _userManager.FindByEmailAsync(user.Email);
 
-            identityUser.RefreshToken = hashedRefreshToken;
-            identityUser.RefreshTokenExpirationDate = refreshTokenExpirationDate;
+            // TODO: Make it so refresh token will be added to database using RefreshToken entity. Don't forget to hash it before
+            // inserting one into database.
 
             await _userManager.UpdateAsync(identityUser);
 
@@ -83,7 +83,7 @@ namespace Crossroads.Application.Services
 
             return token;
         }
-        private async Task<IEnumerable<Claim>> GetClaims(IdentityAppUser user, List<string> audiences)
+        private async Task<IEnumerable<Claim>> GetClaims(IdentityUser user, List<string> audiences)
         {    
             var userRoles = await _userManager.GetRolesAsync(user);
 

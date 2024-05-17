@@ -10,8 +10,8 @@ namespace Crossroads.Application.Interfaces.Services
 {
     public interface ITokenService
     {
-        Task<string> GenerateAccessToken(IdentityAppUser user);
-        Task<string> GenerateRefreshToken(IdentityAppUser user);
+        Task<string> GenerateAccessToken(IdentityUser user);
+        Task<string> GenerateRefreshToken(IdentityUser user);
         Task<string> GenerateExpiredAccessToken();
 
     }
