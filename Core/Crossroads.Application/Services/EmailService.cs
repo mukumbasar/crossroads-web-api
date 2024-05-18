@@ -36,7 +36,7 @@ namespace Crossroads.Application.Services
             _smtpPass = smtpPass;
         }
 
-        public void SendActivationEmail(string token, string email)
+        public async void SendActivationEmailAsync(string token, string email)
         {
             // Sends message to RabbitMQ
             using var connection = _connectionFactory.CreateConnection();
@@ -64,10 +64,10 @@ namespace Crossroads.Application.Services
             Console.WriteLine("Message sent to RabbitMQ: An activation email to {0} is queued.", email);
 
             // Sends email using smtp
-            SendEmailViaSmtp(email, $"Activation Email", $"Please activate your account using the following link: {message.ActivationLink}");
+            await SendEmailViaSmtpAsync(email, "Activation Email", $"Please activate your account using the following link: {message.ActivationLink}");
         }
 
-        private void SendEmailViaSmtp(string toEmail, string subject, string body)
+        private async Task SendEmailViaSmtpAsync(string toEmail, string subject, string body)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Crossroads.Application.Services
                 };
                 mailMessage.To.Add(toEmail);
 
-                smtpClient.Send(mailMessage);
+                await smtpClient.SendMailAsync(mailMessage);
                 Console.WriteLine("Activation email sent to {0}.", toEmail);
             }
             catch (Exception ex)
