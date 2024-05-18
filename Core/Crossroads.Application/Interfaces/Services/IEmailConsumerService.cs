@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Crossroads.Application.Interfaces.Services
 {
-    public interface IEmailService
+    public interface IEmailConsumerService
     {
-        Task SendActivationEmailAsync(string email, string token);
+        Task StartConsumingAsync();
     }
 }

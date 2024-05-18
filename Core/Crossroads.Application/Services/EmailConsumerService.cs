@@ -1,21 +1,19 @@
-﻿using Crossroads.Application.Interfaces.Services;
+﻿using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
+using Crossroads.Application.Dtos.Email;
+using Crossroads.Application.Interfaces.Services;
 
 namespace Crossroads.Application.Services
 {
-    using System;
-    using RabbitMQ.Client;
-    using System.Text;
-    using System.Text.Json;
-    using System.Net.Mail;
-    using System.Net;
-
-    public class EmailService : IEmailService
+    public class EmailConsumerService : IEmailConsumerService
     {
         private readonly string _hostname;
         private readonly string _queueName;
@@ -25,7 +23,7 @@ namespace Crossroads.Application.Services
         private readonly string _smtpUser;
         private readonly string _smtpPass;
 
-        public EmailService(string hostname, string queueName, string smtpServer, int smtpPort, string smtpUser, string smtpPass)
+        public EmailConsumerService(string hostname, string queueName, string smtpServer, int smtpPort, string smtpUser, string smtpPass)
         {
             _hostname = hostname;
             _queueName = queueName;
@@ -36,38 +34,37 @@ namespace Crossroads.Application.Services
             _smtpPass = smtpPass;
         }
 
-        public async Task SendActivationEmailAsync(string token, string email)
+        public async Task StartConsumingAsync()
         {
-            // Sends message to RabbitMQ
-            using var connection = _connectionFactory.CreateConnection();
-            using var channel = connection.CreateModel();
+            var connection = _connectionFactory.CreateConnection();
+            var channel = connection.CreateModel();
             channel.QueueDeclare(queue: _queueName,
                                  durable: false,
                                  exclusive: false,
                                  autoDelete: false,
                                  arguments: null);
 
-            var message = new
+            var consumer = new AsyncEventingBasicConsumer(channel);
+            consumer.Received += async (model, ea) =>
             {
-                Token = token,
-                Email = email,
-                ActivationLink = $"https://localhost/activation/{token}"
+                var body = ea.Body.ToArray();
+                var messageString = Encoding.UTF8.GetString(body);
+                var message = JsonSerializer.Deserialize<EmailContext>(messageString);
+
+                if (message != null)
+                {
+                    await SendEmailAsync(message.Email, message.Subject, message.Body);
+                }
             };
 
-            var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
+            channel.BasicConsume(queue: _queueName,
+                                 autoAck: true,
+                                 consumer: consumer);
 
-            channel.BasicPublish(exchange: "",
-                                 routingKey: _queueName,
-                                 basicProperties: null,
-                                 body: body);
-
-            Console.WriteLine("Message sent to RabbitMQ: An activation email to {0} is queued.", email);
-
-            // Sends email using smtp
-            await SendEmailViaSmtpAsync(email, "Activation Email", $"Please activate your account using the following link: {message.ActivationLink}");
+            Console.WriteLine("Consumer started. Listening for messages...");
         }
 
-        private async Task SendEmailViaSmtpAsync(string toEmail, string subject, string body)
+        private async Task SendEmailAsync(string toEmail, string subject, string body)
         {
             try
             {
@@ -88,7 +85,7 @@ namespace Crossroads.Application.Services
                 mailMessage.To.Add(toEmail);
 
                 await smtpClient.SendMailAsync(mailMessage);
-                Console.WriteLine("Activation email sent to {0}.", toEmail);
+                Console.WriteLine("Email sent to {0}.", toEmail);
             }
             catch (Exception ex)
             {

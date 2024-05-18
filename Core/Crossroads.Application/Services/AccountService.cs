@@ -15,18 +15,14 @@ namespace Crossroads.Application.Services
     public class AccountService : IAccountService
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly IMapper _mapper;
-        private readonly RoleManager<IdentityRole> roleManager;
-        // private readonly IEmailService _emailService;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEmailQueueService _emailQueueService;
 
-        public AccountService(UserManager<IdentityUser> userManager, IMapper mapper, RoleManager<IdentityRole> roleManager
-            //,IEmailService emailService = null
-            )
+        public AccountService(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IEmailQueueService emailQueueService = null)
         {
             _userManager = userManager;
-            _mapper = mapper;
-            this.roleManager = roleManager;
-            //_emailService = emailService;
+            _roleManager = roleManager;
+            _emailQueueService = emailQueueService;
         }
         /// <summary>
         /// Creates a user account in the Identity-based 'AppUser' table.
@@ -50,14 +46,15 @@ namespace Crossroads.Application.Services
             var result = await _userManager.CreateAsync(user, password);
             if (!result.Succeeded) return new ErrorResult(Messages.AccountCreationFailed);
 
-            var role = await roleManager.FindByNameAsync(roleName);
+            var role = await _roleManager.FindByNameAsync(roleName);
             var roleResult = await _userManager.AddToRoleAsync(user, role.Name);
             if (!roleResult.Succeeded) return new ErrorResult(Messages.RoleAssignmentFailed);
-            
-            //TODO: Use email service to send activation mail.
 
-            //await _emailService.EMailUserInformation(user);
-            //await _emailService.SendActivationEmail(user);
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            var body = GenerateActivationLink(token);
+
+            await _emailQueueService.QueueMessageAsync(email, "Account Activation", body);
 
             return new SuccessDataResult<IdentityUser>(user, Messages.AccountCreationSucceeded);
         }
@@ -113,6 +110,12 @@ namespace Crossroads.Application.Services
             if (!result.Succeeded) return new ErrorResult(Messages.AccountUpdateFailed);
 
             return new SuccessDataResult<IdentityUser>(user, Messages.AccountUpdateSucceeded);
+        }
+
+        private string GenerateActivationLink(string token)
+        {
+            // Construct the activation link
+            return $"https://localhost:5000/activation/{token}";
         }
     }
 }

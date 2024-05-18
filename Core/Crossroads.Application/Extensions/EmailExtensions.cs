@@ -18,9 +18,12 @@ namespace Crossroads.Application.Extensions
             // Bind EmailOptions from the configuration
             var emailOptions = configuration.GetSection("EmailOptions").Get<EmailOptions>();
 
-            // Register IEmailService with the retrieved configuration values
-            services.AddSingleton<IEmailService>(provider =>
-                new EmailService(
+            // Register EmailQueueService with the retrieved configuration values
+            services.AddSingleton<IEmailQueueService>(provider => new EmailQueueService(emailOptions.Hostname, emailOptions.QueueName));
+
+            // Register EmailConsumerService with the retrieved configuration values
+            services.AddSingleton<IEmailConsumerService>(provider =>
+                new EmailConsumerService(
                     emailOptions.Hostname,
                     emailOptions.QueueName,
                     emailOptions.SmtpServer,
@@ -28,7 +31,12 @@ namespace Crossroads.Application.Extensions
                     emailOptions.SmtpUser,
                     emailOptions.SmtpPass));
 
+            // Register EmailConsumerBackgroundService as a hosted service
+            services.AddHostedService<EmailConsumerBackgroundService>();
+
             return services;
         }
     }
+
+
 }

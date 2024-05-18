@@ -19,7 +19,7 @@ namespace Crossroads.Application.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAccountService, AccountService>();
 
-            services.AddSingleton<IEmailService>(provider =>
+            services.AddSingleton<Interfaces.Services.IEmailQueueService>(provider =>
             new EmailService("localhost", "activation_queue"));
             services.Configure<EmailOptions>(configuration.GetSection("EmailOptions"));
             return services;
