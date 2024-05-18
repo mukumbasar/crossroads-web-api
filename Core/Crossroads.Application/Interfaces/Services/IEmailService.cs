@@ -8,6 +8,6 @@ namespace Crossroads.Application.Interfaces.Services
 {
     public interface IEmailService
     {
-        void SendActivationEmailAsync(string email, string token);
+        Task SendActivationEmailAsync(string email, string token);
     }
 }

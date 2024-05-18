@@ -36,7 +36,7 @@ namespace Crossroads.Application.Services
             _smtpPass = smtpPass;
         }
 
-        public async void SendActivationEmailAsync(string token, string email)
+        public async Task SendActivationEmailAsync(string token, string email)
         {
             // Sends message to RabbitMQ
             using var connection = _connectionFactory.CreateConnection();
