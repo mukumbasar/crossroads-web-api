@@ -14,11 +14,14 @@ namespace Crossroads.Application.Extensions
 {
     public static class ServiceExtensions
     {
-        public static IServiceCollection AddServices(this IServiceCollection services)
+        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAccountService, AccountService>();
 
+            services.AddSingleton<IEmailService>(provider =>
+            new EmailService("localhost", "activation_queue"));
+            services.Configure<EmailOptions>(configuration.GetSection("EmailOptions"));
             return services;
         }
     }
