@@ -9,6 +9,6 @@ namespace Crossroads.Domain.Entities.Bases
 {
     public class BaseUser : AuditableEntity
     {
-        public string? IdentityAppUserId { get; set; }
+        public string? IdentityId { get; set; }
     }
 }

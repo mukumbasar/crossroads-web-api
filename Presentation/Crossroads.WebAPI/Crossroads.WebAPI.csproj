@@ -17,8 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Middlewares\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Crossroads.Persistence\Crossroads.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

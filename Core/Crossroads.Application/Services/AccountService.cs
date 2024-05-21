@@ -60,10 +60,10 @@ namespace Crossroads.Application.Services
         }
 
         /// <summary>
-        /// Id si verilen hesabı siler.
+        /// Deletes a user account from the Identity-based 'AppUser' table.
         /// </summary>
-        /// <param name="id">Silinecek hesabın id sini temsil eder</param>
-        /// <returns>Silme işleminin başarı durumunu döner</returns>
+        /// <param name="id">The ID of the user intended to be deleted.</param>
+        /// <returns>Returns the process status.</returns>
         public async Task<IResult> DeleteAsync(string id)
         {
             var account = await _userManager.FindByIdAsync(id);
@@ -77,9 +77,9 @@ namespace Crossroads.Application.Services
             return new ErrorResult(Messages.AccountNotFound);
         }
         /// <summary>
-        /// Bütün hesapları listeler
+        /// Lists all accounts from the Identity-based 'AppUser' table.
         /// </summary>
-        /// <returns>Hesapları içeren bir list ve durum mesajını döner</returns>
+        /// <returns>Returns users along with the process status.</returns>
         public async Task<IResult> GetAllAsync()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -88,10 +88,10 @@ namespace Crossroads.Application.Services
             return new SuccessDataResult<List<IdentityUser>>(users, Messages.AccountsListedSuccessfully);
         }
         /// <summary>
-        /// Id si verilen hesabı getirir
+        /// Gets an account by ID from the Identity-based 'AppUser' table.
         /// </summary>
-        /// <param name="id">İstenilen hesabın id sini temsil eder</param>
-        /// <returns>Hesap ve sonuç mesajını döner</returns>
+        /// <param name="id">The ID of the user intended to be retrieved.</param>
+        /// <returns>Returns the user with the process status.</returns>
         public async Task<IResult> GetByIdAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -100,10 +100,10 @@ namespace Crossroads.Application.Services
             return new SuccessDataResult<IdentityUser>(user, Messages.AccountFoundSuccessfully);
         }
         /// <summary>
-        /// Verilen hesabı günceller
+        /// Updates a user account in the Identity-based 'AppUser' table.
         /// </summary>
-        /// <param name="user">Güncellenecek hesabı temsil eder</param>
-        /// <returns>Güncellenen hesapla birlikte durum mesajını döner</returns>
+        /// <param name="user">The user object intended to be updated.</param>
+        /// <returns>Returns the process status.</returns>
         public async Task<IResult> UpdateAsync(IdentityUser user)
         {
             var result = await _userManager.UpdateAsync(user);

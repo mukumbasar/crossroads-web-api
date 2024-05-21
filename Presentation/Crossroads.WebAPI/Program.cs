@@ -1,4 +1,8 @@
 
+using Crossroads.Application.Extensions;
+using Crossroads.Persistence.Extensions;
+using Crossroads.WebAPI.Extensions;
+
 namespace Crossroads.WebAPI
 {
     public class Program
@@ -7,16 +11,19 @@ namespace Crossroads.WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.AddCrossroadsDbContextConfigurations(builder.Configuration);
+            builder.Services.AddRepositories();
+            builder.Services.AddJwtConfigurations(builder.Configuration);
+            builder.Services.AddServices(builder.Configuration);
+            builder.Services.AddEmailExtensions(builder.Configuration);
+            builder.Services.AddFluentValidationWithAssemblies();
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -24,12 +31,8 @@ namespace Crossroads.WebAPI
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }
