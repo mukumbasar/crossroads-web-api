@@ -20,7 +20,7 @@ namespace Crossroads.Persistence.SeedData
         {
             var dbContextBuilder = new DbContextOptionsBuilder<CrossroadsDbContext>();
 
-            dbContextBuilder.UseSqlServer(configuration.GetConnectionString(CrossroadsDbContext.ConnectionName));
+            dbContextBuilder.UseSqlServer(configuration.GetConnectionString(CrossroadsDbContext.ConnectionString));
 
             using CrossroadsDbContext context = new(dbContextBuilder.Options);
 

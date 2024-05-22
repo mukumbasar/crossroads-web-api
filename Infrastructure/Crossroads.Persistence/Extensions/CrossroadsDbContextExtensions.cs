@@ -19,7 +19,7 @@ namespace Crossroads.Persistence.Extensions
             services.AddDbContext<CrossroadsDbContext>(options =>
             {
                 options.UseLazyLoadingProxies();
-                options.UseSqlServer(configuration.GetConnectionString(CrossroadsDbContext.ConnectionName));
+                options.UseSqlServer(configuration.GetConnectionString(CrossroadsDbContext.ConnectionString));
             });
 
             // Configure Identity

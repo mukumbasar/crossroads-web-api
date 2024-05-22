@@ -17,7 +17,7 @@ namespace Crossroads.Persistence.Context
 {
     public class CrossroadsDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>
     {
-        public const string ConnectionName = "Crossroads";
+        public const string ConnectionString = "Data Source=DESKTOP-F4M3HC0\\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Initial Catalog=Crossroads; Application Intent=ReadWrite;Multi Subnet Failover=False";
 
         public CrossroadsDbContext(DbContextOptions<CrossroadsDbContext> options) : base(options)
         {
