@@ -18,7 +18,7 @@ namespace Crossroads.Application.Features.AppUser.Commands.AddAppUser
         public string LastName { get; set; } = null!;
         public Gender Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public IFormFile? Image { get; set; }
+        public IFormFile? ImageFile { get; set; }
         public string? Address { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace Crossroads.Domain.Entities.DbSets
 {
     public class RefreshToken : AuditableEntity
     {
-        public string? RefreshTokenValue { get; set; }
-        public DateTime? RefreshTokenExpirationDate { get; set; }
+        public string? Token { get; set; }
+        public DateTime? ExpirationDate { get; set; }
     }
 }

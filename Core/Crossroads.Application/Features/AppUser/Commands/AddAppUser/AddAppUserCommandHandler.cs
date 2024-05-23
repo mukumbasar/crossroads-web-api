@@ -22,15 +22,18 @@ namespace Crossroads.Application.Features.AppUser.Commands.AddAppUser
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
         private readonly IUow _uow;
+        private readonly IImageConversionService _imageConversionService;
         public AddAppUserCommandHandler(UserManager<IdentityUser> userManager,
             IMapper mapper,
             IUow uow,
-            IAccountService accountService)
+            IAccountService accountService,
+            IImageConversionService imageConversionService)
         {
             _userManager = userManager;
             _mapper = mapper;
             _uow = uow;
             _accountService = accountService;
+            _imageConversionService = imageConversionService;
         }
 
         public async Task<Result> Handle(AddAppUserCommand request, CancellationToken cancellationToken)
@@ -71,10 +74,12 @@ namespace Crossroads.Application.Features.AppUser.Commands.AddAppUser
                     }
 
                     var newAppUser = _mapper.Map<AppUserEntity>(request);
+                    
                     newAppUser.IdentityId = newUser.Id;
+                    if(request.ImageFile != null) newAppUser.Image = await _imageConversionService.ConvertToByteArrayAsync(request.ImageFile);
 
                     await appUserRepository.AddAsync(newAppUser);
-                    await appUserRepository.SaveChangesAsync();
+                    await _uow.CommitAsync();
 
                     result = new SuccessResult(Messages.AccountCreationSucceeded);
 
