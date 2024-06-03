@@ -1,5 +1,6 @@
 
 using Crossroads.Application.Extensions;
+using Crossroads.Application.Features.AppUser.Commands.AddAppUser;
 using Crossroads.Persistence.Extensions;
 using Crossroads.WebAPI.Extensions;
 
@@ -14,8 +15,8 @@ namespace Crossroads.WebAPI
             builder.Services.AddCrossroadsDbContextConfigurations(builder.Configuration);
             builder.Services.AddRepositories();
             builder.Services.AddJwtConfigurations(builder.Configuration);
-            builder.Services.AddServices(builder.Configuration);
             builder.Services.AddEmailExtensions(builder.Configuration);
+            builder.Services.AddFeatureExtensions();
             builder.Services.AddFluentValidationWithAssemblies();
 
             builder.Services.AddControllers();

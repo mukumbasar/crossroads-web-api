@@ -1,11 +1,12 @@
 ﻿using Crossroads.Domain.Entities.Bases;
 using Crossroads.Domain.Entities.DbSets;
-using Crossroads.Domain.EntityConfigurations.Interfaces;
+using Crossroads.Domain.EntityConfigurations;
 using Crossroads.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,21 +18,18 @@ namespace Crossroads.Persistence.Context
 {
     public class CrossroadsDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>
     {
-        public const string ConnectionString = "Data Source=DESKTOP-F4M3HC0\\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Initial Catalog=Crossroads; Application Intent=ReadWrite;Multi Subnet Failover=False";
-
         public CrossroadsDbContext(DbContextOptions<CrossroadsDbContext> options) : base(options)
         {
             
         }
 
         #region DbSets
-        public virtual RefreshToken ReferenceTokens { get; set; }
-        public virtual AppUser AppUsers { get; set; } 
+        public virtual DbSet<RefreshToken> ReferenceTokens { get; set; }
+        public virtual DbSet<AppUser> AppUsers { get; set; }
         #endregion
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(IEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(IEntityTypeConfiguration<>).Assembly);
 
             base.OnModelCreating(modelBuilder);
         }

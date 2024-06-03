@@ -34,7 +34,7 @@ namespace Crossroads.Application.Services
             using var connection = _connectionFactory.CreateConnection();
             using var channel = connection.CreateModel();
             channel.QueueDeclare(queue: _queueName,
-                                 durable: false,
+                                 durable: true,
                                  exclusive: false,
                                  autoDelete: false,
                                  arguments: null);

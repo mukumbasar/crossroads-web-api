@@ -20,7 +20,7 @@ namespace Crossroads.Persistence.SeedData
         {
             var dbContextBuilder = new DbContextOptionsBuilder<CrossroadsDbContext>();
 
-            dbContextBuilder.UseSqlServer(configuration.GetConnectionString(CrossroadsDbContext.ConnectionString));
+            dbContextBuilder.UseSqlServer(configuration.GetConnectionString("MainConnection"));
 
             using CrossroadsDbContext context = new(dbContextBuilder.Options);
 
@@ -28,10 +28,12 @@ namespace Crossroads.Persistence.SeedData
             {
                 await AddRoles(context);
             }
+
             if (!context.Users.Any(user => user.Email == AdminEmail))
             {
                 await AddAdmin(context);
             }
+
             await Task.CompletedTask;
         }
 
@@ -65,8 +67,10 @@ namespace Crossroads.Persistence.SeedData
                     continue;
                 }
 
-                await context.Roles.AddAsync(new IdentityRole(roles[i]));
+                await context.Roles.AddAsync(new IdentityRole { Name = roles[i], NormalizedName = roles[i].ToUpperInvariant() });
             }
+
+            await context.SaveChangesAsync();
         }
     }
 }

@@ -8,7 +8,6 @@ namespace Crossroads.WebAPI.Controllers
     [Route("api/[controller]")]
     public class AppUserController : Controller
     {
-
         private readonly IMediator _mediator;
         public AppUserController(IMediator mediator)
         {

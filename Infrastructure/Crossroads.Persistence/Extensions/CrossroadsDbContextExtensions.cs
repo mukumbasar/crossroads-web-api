@@ -1,4 +1,5 @@
 ﻿using Crossroads.Persistence.Context;
+using Crossroads.Persistence.SeedData;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +20,7 @@ namespace Crossroads.Persistence.Extensions
             services.AddDbContext<CrossroadsDbContext>(options =>
             {
                 options.UseLazyLoadingProxies();
-                options.UseSqlServer(configuration.GetConnectionString(CrossroadsDbContext.ConnectionString));
+                options.UseSqlServer(configuration.GetConnectionString("MainConnection"));
             });
 
             // Configure Identity
@@ -29,6 +30,8 @@ namespace Crossroads.Persistence.Extensions
             })
             .AddEntityFrameworkStores<CrossroadsDbContext>()
             .AddDefaultTokenProviders();
+
+            AdminSeed.SeedAsync(configuration).GetAwaiter().GetResult();
 
             return services;
         }

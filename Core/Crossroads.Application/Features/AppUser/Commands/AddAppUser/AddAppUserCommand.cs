@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Crossroads.Application.Features.AppUser.Commands.AddAppUser
 {
-    public class AddAppUserCommand : IRequest<DataResult<Domain.Entities.DbSets.AppUser>>
+    public class AddAppUserCommand : IRequest<Result>
     {
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
