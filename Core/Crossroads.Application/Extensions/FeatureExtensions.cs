@@ -16,10 +16,15 @@ namespace Crossroads.Application.Extensions
 {
     public static class FeatureExtensions
     {
-        public static IServiceCollection AddFeatureExtensions(this IServiceCollection services)
+        public static IServiceCollection AddFeatureExtensions(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+            services.AddSingleton<IRedisService>(provider =>
+            {
+                return new RedisService(configuration.GetSection("Redis")["ConnectionString"]);
+            });
 
             services.AddScoped<IImageConversionService, ImageConversionService>();
             services.AddScoped<ITokenService, TokenService>();

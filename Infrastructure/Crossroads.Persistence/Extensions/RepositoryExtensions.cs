@@ -18,6 +18,7 @@ namespace Crossroads.Persistence.Extensions
         {
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddScoped<IAppUserRepository, AppUserRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             services.AddScoped<IUow, Uow>();
 

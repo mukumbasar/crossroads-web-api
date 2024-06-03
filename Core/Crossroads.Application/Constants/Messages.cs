@@ -8,6 +8,7 @@ namespace Crossroads.Application.Constants
 {
     public class Messages
     {
+        //ToDo: Change these variable names into grammatically correct forms.
         public const string AccountAlreadyExists = "Account already exists";
         public const string AccountCreationFailed = "Account creation failed";
         public const string AccountCreationSucceeded = "Account creation succeeded";
@@ -19,5 +20,10 @@ namespace Crossroads.Application.Constants
         public const string AccountUpdateFailed = "Account update failed";
         public const string AccountUpdateSucceeded = "Account update succeeded";
         public const string RoleAssignmentFailed = "Role assignment failed";
+
+        public const string CategoryCreationSuccess = "Category creation success";
+        public const string CategoryCreationFail = "Category creation fail";
+        public const string CategoryListingSuccess = "Category listing success";
+        public const string CategoryListingFail = "Category listing fail";
     }
 }

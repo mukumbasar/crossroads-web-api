@@ -16,7 +16,7 @@ namespace Crossroads.WebAPI
             builder.Services.AddRepositories();
             builder.Services.AddJwtConfigurations(builder.Configuration);
             builder.Services.AddEmailExtensions(builder.Configuration);
-            builder.Services.AddFeatureExtensions();
+            builder.Services.AddFeatureExtensions(builder.Configuration);
             builder.Services.AddFluentValidationWithAssemblies();
 
             builder.Services.AddControllers();

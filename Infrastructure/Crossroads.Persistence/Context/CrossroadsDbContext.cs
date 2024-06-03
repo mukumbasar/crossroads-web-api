@@ -26,6 +26,7 @@ namespace Crossroads.Persistence.Context
         #region DbSets
         public virtual DbSet<RefreshToken> ReferenceTokens { get; set; }
         public virtual DbSet<AppUser> AppUsers { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
         #endregion
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

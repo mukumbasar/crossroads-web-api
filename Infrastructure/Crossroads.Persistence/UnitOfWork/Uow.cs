@@ -13,14 +13,17 @@ namespace Crossroads.Persistence.UnitOfWork
         private readonly CrossroadsDbContext _context;
         private readonly IAppUserRepository _appUserRepository;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
         public Uow(CrossroadsDbContext context,
             IAppUserRepository appUserRepository,
-            IRefreshTokenRepository refreshTokenRepository) 
+            IRefreshTokenRepository refreshTokenRepository,
+            ICategoryRepository categoryRepository) 
         {
             _context = context;
             _appUserRepository = appUserRepository;
             _refreshTokenRepository = refreshTokenRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task CommitAsync()
@@ -37,6 +40,11 @@ namespace Crossroads.Persistence.UnitOfWork
         public async Task<IRefreshTokenRepository> GetRefreshTokenRepositoryAsync()
         {
             return await Task.FromResult(_refreshTokenRepository);
+        }
+
+        public async Task<ICategoryRepository> GetCategoryRepositoryAsync()
+        {
+            return await Task.FromResult(_categoryRepository);
         }
     }
 }

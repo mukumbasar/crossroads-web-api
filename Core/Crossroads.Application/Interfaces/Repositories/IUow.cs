@@ -11,5 +11,6 @@ namespace Crossroads.Application.Interfaces.Repositories
         Task CommitAsync();
         Task<IAppUserRepository> GetAppUserRepositoryAsync();
         Task<IRefreshTokenRepository> GetRefreshTokenRepositoryAsync();
+        Task<ICategoryRepository> GetCategoryRepositoryAsync();
     }
 }
