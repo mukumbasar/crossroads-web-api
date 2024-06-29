@@ -41,6 +41,8 @@ namespace Crossroads.Application.Features.Category.Commands.AddCategory
 
             var result = await categoryRepository.AddAsync(category);
 
+            await _uow.CommitAsync();
+
             if(result != null)
             {
                 var redisResult = await _redisService.AddDataAsync($"{keyPrefix}:{category.Id}", JsonConvert.SerializeObject(category));
