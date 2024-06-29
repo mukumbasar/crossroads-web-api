@@ -21,10 +21,10 @@ namespace Crossroads.Application.Extensions
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
-            //services.AddSingleton<IRedisService>(provider =>
-            //{
-            //    return new RedisService(configuration.GetSection("Redis")["ConnectionString"]);
-            //});
+            services.AddSingleton<IRedisService>(provider =>
+            {
+                return new RedisService(configuration.GetSection("Redis")["ConnectionString"]);
+            });
 
             services.AddScoped<IImageConversionService, ImageConversionService>();
             services.AddScoped<ITokenService, TokenService>();

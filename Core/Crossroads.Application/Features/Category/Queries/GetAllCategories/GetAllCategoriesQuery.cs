@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Crossroads.Application.Features.Category.Queries.GetAllCategories
 {
-    public class GetAllCategories : IRequest<Result>
+    public class GetAllCategoriesQuery : IRequest<Result>
     {
 
     }

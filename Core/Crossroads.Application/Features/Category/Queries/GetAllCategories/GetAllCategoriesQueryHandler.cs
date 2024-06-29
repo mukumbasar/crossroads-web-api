@@ -18,7 +18,7 @@ using CategoryEntity = Crossroads.Domain.Entities.DbSets.Category;
 
 namespace Crossroads.Application.Features.Category.Queries.GetAllCategories
 {
-    public class GetAllCategoriesQueryHandler : IRequestHandler<AddAppUserCommand, Result>
+    public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, Result>
     {
         private readonly IMapper _mapper;
         private readonly IUow _uow;
@@ -34,7 +34,7 @@ namespace Crossroads.Application.Features.Category.Queries.GetAllCategories
             _redisService = redisService;
         }
 
-        public async Task<Result> Handle(AddAppUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
         {
 
             var categoryDictionary = await _redisService.GetDataAsync(keyPrefix);

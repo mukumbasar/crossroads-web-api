@@ -77,7 +77,7 @@ namespace Crossroads.Application.Features.AppUser.Commands.AddAppUser
                     
                     newAppUser.IdentityId = newUser.Id;
                     if(request.ImageFile != null) newAppUser.Image = await _imageConversionService.ConvertToByteArrayAsync(request.ImageFile);
-
+                    //ToDo: Set a default image in the case of null image property
                     await appUserRepository.AddAsync(newAppUser);
                     await _uow.CommitAsync();
 
