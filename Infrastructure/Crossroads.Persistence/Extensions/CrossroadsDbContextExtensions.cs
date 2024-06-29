@@ -16,7 +16,7 @@ namespace Crossroads.Persistence.Extensions
     {
         public static IServiceCollection AddCrossroadsDbContextConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
-            // Configure DbContext with lazy loading and SQL Server
+            // Configure DbContext with lazy loading and SQL Server for run-time
             services.AddDbContext<CrossroadsDbContext>(options =>
             {
                 options.UseLazyLoadingProxies();

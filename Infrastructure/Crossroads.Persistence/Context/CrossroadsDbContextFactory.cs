@@ -11,6 +11,7 @@ namespace Crossroads.Persistence.Context
 {
     public class CrossroadsDbContextFactory : IDesignTimeDbContextFactory<CrossroadsDbContext>
     {
+        //Design-time configurations
         public CrossroadsDbContext CreateDbContext(string[] args)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
