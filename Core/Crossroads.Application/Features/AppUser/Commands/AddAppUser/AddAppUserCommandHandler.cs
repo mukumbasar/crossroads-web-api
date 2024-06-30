@@ -4,6 +4,7 @@ using Crossroads.Application.Interfaces.Repositories;
 using Crossroads.Application.Interfaces.Services;
 using Crossroads.Application.Results;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -76,8 +77,19 @@ namespace Crossroads.Application.Features.AppUser.Commands.AddAppUser
                     var newAppUser = _mapper.Map<AppUserEntity>(request);
                     
                     newAppUser.IdentityId = newUser.Id;
-                    if(request.ImageFile != null) newAppUser.Image = await _imageConversionService.ConvertToByteArrayAsync(request.ImageFile);
-                    //ToDo: Set a default image in the case of null image property
+
+                    //Set a default image in the case of null image property
+                    if (request.ImageFile != null)
+                    {
+                        newAppUser.Image = await _imageConversionService.ConvertToByteArrayAsync(request.ImageFile);
+                    }
+                    else
+                    {
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "default-image.jpg");
+                        byte[] defaultImageBytes = await File.ReadAllBytesAsync(filePath);
+                        newAppUser.Image = defaultImageBytes;
+                    }
+                    
                     await appUserRepository.AddAsync(newAppUser);
                     await _uow.CommitAsync();
 
@@ -85,7 +97,7 @@ namespace Crossroads.Application.Features.AppUser.Commands.AddAppUser
 
                     transaction.Commit();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     result = new ErrorResult(Messages.AccountCreationFailed);
                     transaction.Rollback();
