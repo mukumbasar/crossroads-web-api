@@ -25,7 +25,7 @@ namespace Crossroads.Application.Services
             // Keep it running if it is not canceleld
             while (!stoppingToken.IsCancellationRequested)
             {
-                await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken); // Delay the execution
+                await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken); 
             }
         }
     }

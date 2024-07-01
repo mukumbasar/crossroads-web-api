@@ -1,13 +1,11 @@
 ﻿using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Crossroads.Application.Dtos.Email;
 using Crossroads.Application.Interfaces.Services;
 
@@ -27,7 +25,7 @@ namespace Crossroads.Application.Services
         {
             _hostname = hostname;
             _queueName = queueName;
-            _connectionFactory = new ConnectionFactory() { HostName = _hostname };
+            _connectionFactory = new ConnectionFactory() { HostName = _hostname};
             _smtpServer = smtpServer;
             _smtpPort = smtpPort;
             _smtpUser = smtpUser;
@@ -44,21 +42,21 @@ namespace Crossroads.Application.Services
                                  autoDelete: false,
                                  arguments: null);
 
-            var consumer = new AsyncEventingBasicConsumer(channel);
-            consumer.Received += async (model, ea) =>
+            var consumer = new EventingBasicConsumer(channel);
+
+            consumer.Received += (model, ea) =>
             {
                 var body = ea.Body.ToArray();
                 var messageString = Encoding.UTF8.GetString(body);
                 var message = JsonSerializer.Deserialize<EmailContext>(messageString);
 
-                if (message != null)
-                {
-                    await SendEmailAsync(message.Email, message.Subject, message.Body);
-                }
+                SendEmailAsync(message.Email, message.Subject, message.Body).Wait(); //Send the message via smtp
+
+                channel.BasicAck(ea.DeliveryTag, false); // Acknowledge the message
             };
 
             channel.BasicConsume(queue: _queueName,
-                                 autoAck: true,
+                                 autoAck: false,
                                  consumer: consumer);
 
             Console.WriteLine("Consumer started. Listening for messages...");

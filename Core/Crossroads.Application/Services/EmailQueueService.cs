@@ -14,6 +14,7 @@ namespace Crossroads.Application.Services
     using System.Text.Json;
     using System.Net.Mail;
     using System.Net;
+    using Crossroads.Application.Dtos.Email;
 
     public class EmailQueueService : IEmailQueueService
     {
@@ -39,7 +40,7 @@ namespace Crossroads.Application.Services
                                  autoDelete: false,
                                  arguments: null);
 
-            var payload = new
+            var payload = new EmailContext
             {
                 Email = email,
                 Subject = subject,
