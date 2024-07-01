@@ -17,6 +17,7 @@ namespace Crossroads.Application.Mapping
         {
             CreateMap<AddCategoryCommand, Category>();
             CreateMap<Category, CategoryListDto>();
+            CreateMap<CategoryListDto, Category>();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Crossroads.Application.Features.Category.Commands.AddCategory;
+using Crossroads.Application.Features.Category.Queries.GetAllCategories;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,16 @@ namespace Crossroads.WebAPI.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             var result = await _mediator.Send(addCategoryCommand);
+            return result.IsSuccess ? Ok(result) : BadRequest(result);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAll()
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var result = await _mediator.Send(new GetAllCategoriesQuery());
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
     }

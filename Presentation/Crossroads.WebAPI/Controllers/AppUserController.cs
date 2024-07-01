@@ -1,8 +1,6 @@
 ﻿using Crossroads.Application.Features.AppUser.Commands.AddAppUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Mail;
-using System.Net;
 
 namespace Crossroads.WebAPI.Controllers
 {

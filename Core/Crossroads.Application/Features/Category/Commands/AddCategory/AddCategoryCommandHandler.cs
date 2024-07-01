@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Crossroads.Application.Constants;
+using Crossroads.Application.Dtos.Queries;
 using Crossroads.Application.Features.AppUser.Commands.AddAppUser;
 using Crossroads.Application.Interfaces.Repositories;
 using Crossroads.Application.Interfaces.Services;
@@ -47,8 +48,9 @@ namespace Crossroads.Application.Features.Category.Commands.AddCategory
             {
                 var redisResult = await _redisService.AddDataAsync($"{keyPrefix}:{category.Id}", JsonConvert.SerializeObject(category));
 
+                var categoryListDto = _mapper.Map<CategoryListDto>(result);
                 return redisResult
-                    ? new SuccessDataResult<CategoryEntity>(result, Messages.CategoryCreationSuccess)
+                    ? new SuccessDataResult<CategoryListDto>(categoryListDto, Messages.CategoryCreationSuccess)
                     : new ErrorResult(Messages.CategoryCreationFail);
             }
 
