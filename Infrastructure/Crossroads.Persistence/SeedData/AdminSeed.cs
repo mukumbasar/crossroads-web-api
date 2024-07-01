@@ -1,4 +1,5 @@
-﻿using Crossroads.Domain.Enums;
+﻿using Crossroads.Domain.Entities.DbSets;
+using Crossroads.Domain.Enums;
 using Crossroads.Persistence.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -48,11 +49,22 @@ namespace Crossroads.Persistence.SeedData
                 EmailConfirmed = true
             };
             user.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(user, AdminPassword);
-            await context.Users.AddAsync(user);
+            var identityUser = await context.Users.AddAsync(user);
 
             var adminRoleId = context.Roles.FirstOrDefault(role => role.Name == Roles.Admin.ToString())!.Id;
 
             await context.UserRoles.AddAsync(new IdentityUserRole<string> { UserId = user.Id, RoleId = adminRoleId });
+            //ToDo: Test the admin data seeding
+            AppUser appUser = new()
+            {
+                FirstName = "Admin",
+                LastName = "Admin",
+                Address = "Address",
+                Gender = Gender.Male,
+                IdentityId = identityUser.Entity.Id
+            };
+
+            await context.AppUsers.AddAsync(appUser);
 
             await context.SaveChangesAsync();
         }
