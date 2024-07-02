@@ -14,7 +14,7 @@ namespace Crossroads.Persistence.SeedData
 {
     internal static class AdminSeed
     {
-        private const string AdminEmail = "admin@crossroads.com";
+        private const string AdminEmail = "admin33333@crossroads.com";
         private const string AdminPassword = "Admin-3";
 
         public static async Task SeedAsync(IConfiguration configuration)
@@ -54,14 +54,18 @@ namespace Crossroads.Persistence.SeedData
             var adminRoleId = context.Roles.FirstOrDefault(role => role.Name == Roles.Admin.ToString())!.Id;
 
             await context.UserRoles.AddAsync(new IdentityUserRole<string> { UserId = user.Id, RoleId = adminRoleId });
-            //ToDo: Test the admin data seeding
+            
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "default-image.jpg");
+            byte[] defaultImageBytes = await File.ReadAllBytesAsync(filePath);
+
             AppUser appUser = new()
             {
                 FirstName = "Admin",
                 LastName = "Admin",
                 Address = "Address",
                 Gender = Gender.Male,
-                IdentityId = identityUser.Entity.Id
+                IdentityId = identityUser.Entity.Id,
+                Image = defaultImageBytes
             };
 
             await context.AppUsers.AddAsync(appUser);
