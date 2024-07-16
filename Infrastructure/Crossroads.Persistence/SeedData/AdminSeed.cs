@@ -37,7 +37,7 @@ namespace Crossroads.Persistence.SeedData
 
             await Task.CompletedTask;
         }
-        //ToDo: Add Admin as an AppUser as well during the seeding of the initial data.
+  
         private static async Task AddAdmin(CrossroadsDbContext context)
         {
             IdentityUser user = new()

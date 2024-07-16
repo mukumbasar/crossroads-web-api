@@ -23,6 +23,9 @@ namespace Crossroads.Domain.EntityConfigurations
             builder.Property(x => x.DateOfBirth).IsRequired();
             builder.Property(x => x.Image).IsRequired(false);
             builder.Property(x => x.Address).IsRequired(false);
+
+            builder.HasMany(x => x.ChatRoomAdmins).WithOne(cra => cra.AppUser).HasForeignKey(cra => cra.AppUserId);
+            builder.HasMany(x => x.ChatRoomChatters).WithOne(cra => cra.AppUser).HasForeignKey(cra => cra.AppUserId);
         }
     }
 }

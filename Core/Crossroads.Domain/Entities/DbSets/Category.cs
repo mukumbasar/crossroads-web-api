@@ -10,5 +10,6 @@ namespace Crossroads.Domain.Entities.DbSets
     public class Category : AuditableEntity
     {
         public string Name { get; set; }
+        public List<ChatRoomCategory> ChatRoomCategories { get; set; }
     }
 }

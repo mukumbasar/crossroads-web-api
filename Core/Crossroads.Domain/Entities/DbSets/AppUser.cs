@@ -16,5 +16,7 @@ namespace Crossroads.Domain.Entities.DbSets
         public DateTime DateOfBirth { get; set; }
         public byte[] Image { get; set; }
         public string? Address { get; set; }
+        public List<ChatRoomAdmin> ChatRoomAdmins { get; set; }
+        public List<ChatRoomChatter> ChatRoomChatters { get; set; }
     }
 }

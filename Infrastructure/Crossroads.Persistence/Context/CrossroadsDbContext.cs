@@ -24,10 +24,16 @@ namespace Crossroads.Persistence.Context
         }
 
         #region DbSets
-        public virtual DbSet<RefreshToken> ReferenceTokens { get; set; }
         public virtual DbSet<AppUser> AppUsers { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<ChatRoom> ChatRooms { get; set; }
+        public virtual DbSet<ChatRoomAdmin> ChatRoomAdmins { get; set; }
+        public virtual DbSet<ChatRoomCategory> ChatRoomCategories { get; set; }
+        public virtual DbSet<ChatRoomChatter> ChatRoomChatters { get; set; }
+        public virtual DbSet<ChatRoomMessage> ChatRoomMessages { get; set; }
+        public virtual DbSet<RefreshToken> ReferenceTokens { get; set; }
         #endregion
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(IEntityTypeConfiguration<>).Assembly);
