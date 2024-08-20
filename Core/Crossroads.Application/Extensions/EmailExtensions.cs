@@ -31,12 +31,18 @@ namespace Crossroads.Application.Extensions
                     emailOptions.SmtpUser,
                     emailOptions.SmtpPass));
 
-            // Register EmailConsumerBackgroundService as a hosted service
-            services.AddHostedService<EmailConsumerBackgroundService>();
+            // Trigger RabbitMQ consumer
+            var serviceProvider = services.BuildServiceProvider();
+            var emailConsumerService = serviceProvider.GetRequiredService<IEmailConsumerService>();
+            var consumingTask = emailConsumerService.StartConsumingAsync();
 
             return services;
         }
+
+        public static async Task StartEmailConsumerAsync(IServiceProvider serviceProvider)
+        {
+            var emailConsumerService = serviceProvider.GetRequiredService<IEmailConsumerService>();
+            await emailConsumerService.StartConsumingAsync();
+        }
     }
-
-
 }

@@ -1,6 +1,7 @@
 
 using Crossroads.Application.Extensions;
 using Crossroads.Application.Features.AppUser.Commands.AddAppUser;
+using Crossroads.Application.Helper;
 using Crossroads.Persistence.Extensions;
 using Crossroads.WebAPI.Extensions;
 
@@ -24,6 +25,8 @@ namespace Crossroads.WebAPI
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            EmailConsumerTrigger.StartEmailConsumerAsync(app.Services).GetAwaiter().GetResult();
 
             if (app.Environment.IsDevelopment())
             {
