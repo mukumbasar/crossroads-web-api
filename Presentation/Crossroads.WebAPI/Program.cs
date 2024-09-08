@@ -19,6 +19,7 @@ namespace Crossroads.WebAPI
             builder.Services.AddEmailExtensions(builder.Configuration);
             builder.Services.AddFeatureExtensions(builder.Configuration);
             builder.Services.AddFluentValidationWithAssemblies();
+            builder.Services.AddSwaggerGenConfigurations();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

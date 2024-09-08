@@ -2,8 +2,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Crossroads.WebAPI.Controllers
+namespace Crossroads.WebAPI.Controllers.Account
 {
+    [Area("Account")]
     [ApiController]
     [Route("api/[controller]")]
     public class AppUserController : Controller
@@ -15,7 +16,7 @@ namespace Crossroads.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("[action]")]
+        [Route("register")]
         public async Task<IActionResult> Create(AddAppUserCommand addAppUserCommand)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
